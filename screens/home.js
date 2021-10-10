@@ -1,50 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, SafeAreaView, Image} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, SafeAreaView, Image, Dimensions, ScrollView} from 'react-native';
 import axios from 'axios';
+import Search from '../components/search';
 import { DataTable } from 'react-native-paper';
-import * as Location from "expo-location";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 
 export default function Home() {
 
-  const [location, setLocation] = useState(null);
-  const [disAddress, setDisAddress] = useState(null);
-  
-
-  const getLocation = async() => {
-
-    let {status} = await Location.requestForegroundPermissionsAsync();
-    
-    if (status !== 'granted') {
-      console.log('Permission to access location was denied');
-      return;
-    }
-
-    let loc = await Location.getCurrentPositionAsync({});
-    setLocation(loc);
-
-    let lat=loc.coords.latitude;
-    let long = loc.coords.longitude;
-
-    // console.log(lat);
-
-    if(loc){
-      let res = await Location.reverseGeocodeAsync(
-        {
-          latitude: lat,
-          longitude: long
-        }
-      )
-
-      for (let item of res){
-        let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}`;
-        setDisAddress(address);
-      }
-    };
-
-  }
-
-  
 
   const [details, setDetails] = useState([{"language": "",
                                             "name": "",
@@ -117,15 +81,33 @@ export default function Home() {
     let msInDay = 1000*3600*24;
     let nodays = (difference/msInDay);
     yrOld = (Math.round(nodays/365*100))/100;
-    console.log(yrOld);
   }
+
+  // const win = Dimensions.get('window');
  
     
   return(
     <View>
-      <View>
-        <Text style={styles.inputText}>Enter Name</Text>
+      <ScrollView>
+      <View style={styles.searchSection}>
+          <Icon style={styles.searchIcon} name="search" size={20} color="#000"
+          onPress={funcCombined}
+          />
+          <TextInput
+            style={styles.inputIcon}
+            placeholder="User Nickname"
+            onChangeText={(val) => {setText(val)}}
+            underlineColorAndroid="transparent"
+          />
+      </View>
+      {/* <View style={styles.head}> 
         <SafeAreaView style={styles.content}>
+          <Icon 
+          name="search"
+          size={32}
+          color='gray'
+          style={styles.icon}
+          />
           <TextInput 
             style ={styles.input}
             placeholder = 'e.g Game of Thrones'
@@ -139,11 +121,12 @@ export default function Home() {
             color='#FFFFFF'
           />
         </View>
-      </View>
+      </View>  */}
       <View style={styles.vImg}>
         <Image 
         style={styles.img}
         source={{uri}}
+        resizeMode='contain'
         />
       </View>
       <DataTable>
@@ -169,24 +152,19 @@ export default function Home() {
       </DataTable.Row>
       </DataTable>
       <View style={styles.summ}>
-        <Text>
-          Summary: {result}
+        <Text style={styles.synpText}>
+          Synopsis:
+        </Text>
+        <Text style={styles.summText}>
+          {result}
         </Text>
       </View>
-      <View>
+      {/* <View>
         <Text>
           This show is {yrOld} years old!
         </Text>
-      </View>
-      <View>
-        <Button 
-        title='GET LOCATION'
-        onPress={getLocation}
-        />
-      </View>
-      <View style={styles.locV}>
-        <Text>{disAddress}</Text>
-      </View>
+      </View> */}
+      </ScrollView>
     </View>
   )
 };
@@ -195,6 +173,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  head:{
+    flexDirection: 'row',
   },
   inputText: {
     textAlign: 'center',
@@ -207,6 +188,12 @@ const styles = StyleSheet.create({
    paddingVertical: 6,
    borderBottomWidth: 1,
    borderBottomColor: '#ddd',
+   marginTop: 20,
+   marginLeft: 80,
+   width: 200
+  },
+  icon: {
+    marginRight: 200
   },
   content:{
     alignItems: 'center'
@@ -217,20 +204,47 @@ const styles = StyleSheet.create({
     backgroundColor: '#007AFF',
     marginBottom: 10
   },
-  locV: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   vImg: {
-    marginTop: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'row',
   },
   img: {
-    width:200,
-    height:250,
+    // flex:1,
+    flex: 1,
+    aspectRatio: 1 
   },
   summ:{
     margin:5
+  },
+  searchSection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 0.5,
+    borderColor: '#000',
+    height: 40,
+    borderRadius: 5,
+    margin: 10,
+    // marginTop: 20
+  },
+  searchIcon: {
+    padding: 10,
+    marginTop: -5
+  },
+  inputIcon: {
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    backgroundColor: '#fff',
+    color: '#424242',
+  },
+  synpText: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  summText: {
+    marginTop: 2
   }
 });

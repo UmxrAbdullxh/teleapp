@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput,TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Text, View, TextInput,TouchableOpacity, Alert, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 // import { withNavigation } from 'react-navigation';
@@ -21,7 +21,7 @@ const Signup = () => {
 
         axios.post(url, creds).then((res)=>{
             const result = res.data;
-            console.log(result);
+            // console.log(result);
             if(result._id){
               Alert.alert('SUCCESS!', 'Account created successfully', [
                   {
@@ -29,6 +29,14 @@ const Signup = () => {
                       onPress: () => console.log('Button pressed')
                   }
               ])
+            }
+            else{
+                Alert.alert('FAILED', 'User with this email already exists!', [
+                    {
+                        text: 'OK',
+                        onPress: () => console.log('Button Pressed')
+                    }
+                ])
             }
         }).catch(err => {
             console.log(err)
@@ -43,11 +51,16 @@ const Signup = () => {
     return(
         <View style={styles.content}>
             <StatusBar style="auto" />
+            <Image 
+                     source={{uri: 'https://cdn.pixabay.com/photo/2020/05/09/17/09/boruto-5150531_960_720.png'}}
+                     style={styles.img}
+                     resizeMode={'cover'}
+                     />
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Name."
-                    placeholderTextColor="#003f5c"
+                    placeholderTextColor="#ffffff"
                     onChangeText={(val) => setName(val)}
                 />
             </View>
@@ -55,7 +68,7 @@ const Signup = () => {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Email."
-                    placeholderTextColor="#003f5c"
+                    placeholderTextColor="#ffffff"
                     onChangeText={(val) => setEmail(val)}
                 />
             </View>
@@ -63,7 +76,7 @@ const Signup = () => {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Password."
-                    placeholderTextColor="#003f5c"
+                    placeholderTextColor="#ffffff"
                     secureTextEntry={true}
                     onChangeText={(password) => setPassword(password)}
                 />
@@ -81,23 +94,21 @@ const Signup = () => {
 const styles = StyleSheet.create({
     content: {
       flex: 1,
-      backgroundColor: "#fff",
+      backgroundColor: "#008388",
       alignItems: "center",
-      justifyContent: "center",
+    //   justifyContent: "center",
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
-        borderRadius: 30,
-        width: "80%",
-        height: 45,
-        marginBottom: 20,
-        alignItems: "center",
-        justifyContent: 'center',
+        padding: 10,
     },
     TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
+        marginTop: 30,
+        marginBottom: 0,
+        paddingHorizontal: 8,
+        paddingVertical: 6,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ffffff',
+        width: 300,
     },
     loginBtn: {
         width: "80%",
@@ -108,6 +119,14 @@ const styles = StyleSheet.create({
         marginTop: 40,
         backgroundColor: "#FF1493",
       },
+      img:{
+          width: 200,
+          height: 200,
+          marginTop: 50,
+      },
+      loginText: {
+          color: '#ffffff'
+      }
 });
 
 export default Signup;
