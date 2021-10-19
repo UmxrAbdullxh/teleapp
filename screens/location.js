@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
-import { StyleSheet, Button, View, Text } from 'react-native';
+import { StyleSheet, Button, View, TouchableHighlight } from 'react-native';
 import * as Location from "expo-location";
 import axios from 'axios';
+import DisplayComponent from '../components/displayComponent';
+import Icon from "react-native-vector-icons/Ionicons";
+import { useNavigation } from '@react-navigation/core';
 
 const Loctn = ()  => {
 
+    const navigation = useNavigation();
+
     const [location, setLocation] = useState(null);
     const [disAddress, setDisAddress] = useState(null);
-    const [code, setCode] = useState('loading..');
-    const [det, setDet] = useState("");
+    const [code, setCode] = useState('');
+    const [det, setDet] = useState([]);
     
   
     const getLocation = async() => {
@@ -28,7 +33,8 @@ const Loctn = ()  => {
   
       // console.log(lat);
   
-      if(loc){
+      if(loc)
+      {
         let res = await Location.reverseGeocodeAsync(
           {
             latitude: lat,
@@ -42,64 +48,80 @@ const Loctn = ()  => {
           setCode(cCode);
           setDisAddress(address);
         }
-      };
-    }
+      };       
 
-    if(typeof(code)!='undefined'){
-
-        const Dte = new Date();
-
+        const Dte = new Date().toISOString().slice(0, 10);
+        // console.log(Dte);
+      
+      if(typeof(code)!='undefined'){
         const options = {
             method: 'GET',
-            url: 'https://api.tvmaze.com/schedule?country=' + code + '&date=' + Dte
+            url: 'https://api.tvmaze.com/schedule?country=' + code + '&date=2017-10-11'  
         };
 
-        const getDet = () => {
-
-            axios.request(options).then((response)=>{
-                console.log(response);
-            }).catch((error) => {
-                console.log(error);
-            });
-        }
-    }
+        axios.request(options).then((response)=>{
+            // console.log(response.data);
+            setDet(response.data);
+        }).catch((error) => {
+            console.log(error);
+        });
         
-        // console.log(options.url)
+    
+      }
 
+       
+    
+    }
+
+    
+
+
+    // const funcComb = () => {
+    //     getLocation();
+    //     getDet();
     // }
+
+   
 
 
 
     return(
-        <View style={styles.container}>
+        <View style>
             <View>
                 <Button 
-                    title='GET LOCATION'
+                    title='GET SCHEDULE'
                     onPress={getLocation}
                 />
             </View>
-            <View style={styles.locV}>
-                <Text>{disAddress}</Text>
-            </View>
             <View>
-                <Button 
-                    title='GET DETAILS'
-                    onPress = {getDet}
-                />
+                <DisplayComponent det={det}/>
+            </View>
+            <View style={styles.button}>
+                            <Icon name="md-chatbubbles-outline" 
+                            size={64} 
+                            // color="#008388"
+                            style={styles.icon}
+                            onPress={()=>{navigation.navigate('Chat')}}
+                            /> 
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    locV: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    // borderRadius: 50,
+    // width: 60,
+    height: 60,
+    // backgroundColor: '#ffffff',
+    marginTop: 470,
+    marginLeft: 300
+},
+icon: {
+    marginRight: -2,
+    marginTop: -2
+}
 })
 export default Loctn;
