@@ -10,7 +10,7 @@ import Login from '../screens/login';
 import Signup from '../screens/signup';
 import Loctn from '../screens/location';
 import Chatbot from '../screens/chatBot';
-import Save from '../screens/saveFile';
+// import Save from '../screens/saveFile';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import { NavigationActions } from 'react-navigation';
@@ -29,32 +29,16 @@ export default function RootStack() {
     return(
         <NavigationContainer>
             <Stack.Navigator>
-            <Stack.Screen name="SAVE" component={Save} />
-                <Stack.Screen name="Location" component={Loctn} />
-                <Stack.Screen name="Chat" component={Chatbot} />
-                <Stack.Screen name="Home" component={Home} 
-                // options={{ ({navigation}) => ({
-                    
-                //     headerRight: () => (
-                //         <View style={styles.iconContainer}>
-                //         {/* <Icon type="ionicon" name={Platform.OS === "ios" ? "ios-search" : "md-search"} /> */}
-                //         <Icon type="ionicon" name={Platform.OS === "ios" ? "ios-location" : "md-location"} 
-                //         onPress={()=>{pressHandler}}
-                //         />
-                        
-                //       </View>
-                //     )
-                // })
-                // }}
-                options={({ navigation }) => ({
-                    headerRight: () => (
-                      <Icon
-                        type="ionicon"
-                        onPress={() => navigation.navigate('Location')}
-                        name={Platform.OS === "ios" ? "ios-location" : "md-location"}
-                      />
-                    ),
-                })}
+                <Stack.Screen name="Home" component={Home}
+                    options={({ navigation }) => ({
+                        headerRight: () => (
+                        <Icon
+                            type="ionicon"
+                            onPress={() => navigation.navigate('Location')}
+                            name={Platform.OS === "ios" ? "ios-location" : "md-location"}
+                        />
+                        ),
+                    })}
 
                 
                 /> 
@@ -82,6 +66,9 @@ export default function RootStack() {
                         },
                     }}
                 />   
+                <Stack.Screen name="Location" component={Loctn} />
+                <Stack.Screen name="Chat" component={Chatbot} />
+                {/* <Stack.Screen name="SAVE" component={Save} /> */}
             </Stack.Navigator>
         </NavigationContainer>
     );

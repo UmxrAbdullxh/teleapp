@@ -14,6 +14,7 @@ const Loctn = ()  => {
     const [disAddress, setDisAddress] = useState(null);
     const [code, setCode] = useState('');
     const [det, setDet] = useState([]);
+
     
   
     const getLocation = async() => {
@@ -47,6 +48,7 @@ const Loctn = ()  => {
           let cCode = `${item.isoCountryCode}`
           setCode(cCode);
           setDisAddress(address);
+          console.log(address);
         }
       };       
 

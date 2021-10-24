@@ -5,6 +5,8 @@ import axios from 'axios';
 import Search from '../components/search';
 import { DataTable } from 'react-native-paper';
 import Icon from "react-native-vector-icons/FontAwesome";
+import Save from './saveFile';
+// import Save from './saveFile';
 
 
 export default function Home() {
@@ -100,6 +102,7 @@ export default function Home() {
             underlineColorAndroid="transparent"
           />
       </View>
+      < Save />
       {/* <View style={styles.head}> 
         <SafeAreaView style={styles.content}>
           <Icon 
@@ -159,11 +162,11 @@ export default function Home() {
           {result}
         </Text>
       </View>
-      {/* <View>
+      <View>
         <Text>
           This show is {yrOld} years old!
         </Text>
-      </View> */}
+      </View>
       </ScrollView>
     </View>
   )
